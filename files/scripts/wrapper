@@ -1,0 +1,51 @@
+#!/bin/bash
+set -e
+DIR="$PWD"
+
+usage() {
+   echo "Usage: $0 [command]"
+   echo
+   echo "Commands:"
+   echo "              enter  enter a bash in the GridHadrons environment"
+   echo "    install [<DIR>]  install micromegas in <DIR> (default: micromegas_5.2.4)"
+   echo "             -h, -?  display this help"
+   echo
+   echo "Examples:"
+   echo "  flatpak run fr.cnrs.lapth.MicrOMEGAs install -d MicrOMEGAs"
+   echo "  cd MicrOMEGAs"
+   echo "  flatpak run fr.cnrs.lapth.MicrOMEGAs ./newProject my-new-project"
+   echo "  flatpak run fr.cnrs.lapth.MicrOMEGAs ./calchep"
+}
+
+if [ $# == 0 ]; then
+   usage
+   exit 0
+fi
+
+while getopts "h?" arg; do
+   case "$arg" in
+      h|\?)
+         usage
+         exit 0
+      ;;
+      *)
+         usage >&2
+         exit 1
+      ;;
+   esac
+done
+shift $((OPTIND -1))
+
+if [ ! -z "$INSTALLATIONDIR" ]; then
+   #INSTALLATIONDIR must be an absolute path:
+   [ "x${INSTALLATIONDIR::1}" == "x/" ] || INSTALLATIONDIR="$DIR/$INSTALLATIONDIR"
+
+   export PATH="$INSTALLATIONDIR/install/bin:$PATH"
+fi
+
+if [ "x$1" == "xinstall" ]; then
+   shift
+   /app/bin/installer "$@"
+else
+   "$@"
+fi

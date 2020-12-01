@@ -1,0 +1,21 @@
+app-id: fr.cnrs.lapth.MicrOMEGAs
+runtime: org.freedesktop.Sdk
+runtime-version: '20.08'
+sdk: org.freedesktop.Sdk
+command: /app/bin/wrapper
+finish-args:
+   - --filesystem=host
+   - --socket=x11
+modules:
+   - name: buildenv
+     buildsystem: simple
+     build-commands:
+        - install -Dt /app/bin scripts/*
+        - install -D micromegas_5.2.4.tgz /app/data/micromegas_5.2.4.tgz
+     sources:
+        - type: dir
+          path: files
+        - type: file
+          path: micromegas_5.2.4.tgz
+          url: https://lapth.cnrs.fr/micromegas/downloadarea/code/micromegas_5.2.4.tgz
+          sha256: 2751f01c396d9de4356d55c8811058fc527a057cba83256fb6fdcc2910fd10c2

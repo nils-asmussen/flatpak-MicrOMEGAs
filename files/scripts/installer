@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+if [ $# == 0 ]; then
+   DEST="micromegas_5.2.4"
+else
+   DEST="$1"
+fi
+
+if [ -e "$DEST" ]; then
+   echo "Error: $DEST already exists"
+else
+   echo "installing micromegas 5.2.4"
+   mkdir "$DEST"
+   cd "$DEST"
+   tar --strip-components=1 -xzf /app/data/micromegas_5.2.4.tgz
+   make
+fi
